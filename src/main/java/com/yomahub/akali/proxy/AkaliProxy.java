@@ -32,9 +32,9 @@ public class AkaliProxy {
 
     private final Object bean;
 
-    private List<Method> fallbackMethodList;
+    private final List<Method> fallbackMethodList;
 
-    private List<Method> hotspotMethodList;
+    private final List<Method> hotspotMethodList;
 
     public AkaliProxy(Object bean, List<Method> fallbackMethodList, List<Method> hotspotMethodList) {
         this.bean = bean;
@@ -44,7 +44,8 @@ public class AkaliProxy {
 
     public Object proxy() throws Exception{
         Collection<Method> methodList = CollUtil.union(fallbackMethodList, hotspotMethodList);
-        Object object = new ByteBuddy().subclass(bean.getClass())
+
+        return new ByteBuddy().subclass(bean.getClass())
                 .name(StrUtil.format("{}$ByteBuddy${}", bean.getClass().getSimpleName(), IdUtil.fastSimpleUUID()))
                 .method(ElementMatchers.namedOneOf(methodList.stream().map(Method::getName).toArray(String[]::new)))
                 .intercept(InvocationHandlerAdapter.of(new AopInvocationHandler()))
@@ -53,8 +54,6 @@ public class AkaliProxy {
                 .load(AkaliProxy.class.getClassLoader())
                 .getLoaded()
                 .newInstance();
-
-        return object;
     }
 
     public class AopInvocationHandler implements InvocationHandler {

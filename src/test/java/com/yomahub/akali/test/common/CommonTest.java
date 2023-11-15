@@ -1,6 +1,6 @@
-package com.yomahub.akali.test.base;
+package com.yomahub.akali.test.common;
 
-import com.yomahub.akali.test.base.bean.TestBean;
+import com.yomahub.akali.test.common.bean.TestBean;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,10 +12,10 @@ import org.springframework.test.context.TestPropertySource;
 import javax.annotation.Resource;
 
 @TestPropertySource(value = "classpath:application.properties")
-@SpringBootTest(classes = BaseTest.class)
+@SpringBootTest(classes = CommonTest.class)
 @EnableAutoConfiguration
-@ComponentScan({ "com.yomahub.akali.test.base.bean" })
-public class BaseTest {
+@ComponentScan({"com.yomahub.akali.test.common.bean"})
+public class CommonTest {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 

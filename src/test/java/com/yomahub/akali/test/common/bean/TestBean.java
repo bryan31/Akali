@@ -1,4 +1,4 @@
-package com.yomahub.akali.test.base.bean;
+package com.yomahub.akali.test.common.bean;
 
 import com.yomahub.akali.annotation.AkaliFallback;
 import com.yomahub.akali.annotation.AkaliHot;

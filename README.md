@@ -3,6 +3,9 @@
     <img src="static/img/logo-main.svg" height="auto" alt="logo">
 </a>
 </p>
+
+### 官网：https://akali.yomahub.com
+
 ### 介绍
 
 Akali（阿卡丽）是一个轻量级本地化热点检测/降级框架，适用于大流量场景，可轻松解决业务中超高流量的并发查询等场景。并且接入和使用极其简单，10秒钟即可接入使用！

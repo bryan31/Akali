@@ -31,8 +31,15 @@ public class CommonTest {
 
     @Test
     public void test2(){
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 50; i++) {
             log.info(testBean.sayHi2("jack"));
+        }
+    }
+
+    @Test
+    public void test3(){
+        for (int i = 0; i < 50; i++) {
+            log.info(testBean.sayHi2("jack"+i));
         }
     }
 }

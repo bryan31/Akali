@@ -68,6 +68,10 @@ public SkuInfo getSkuInfo(String skuCode){
 
 
 
+对开源项目比较熟悉的同学看到这肯定想到了京东的框架-`hotkey`，`Akali`不同于`hotkey`，完全是本地运行的，不依赖于服务端，而且接入比`hotkey` 方便多了。性能完全相当于`hotkey`。
+
+
+
 #### 对任意方法进行降级
 
 只需要加上`@AkaliFallback`注解。任意方法均可获得降级功能。
@@ -112,4 +116,3 @@ Akali在springboot中会自动扫描所有标注的类，您无需做任何配�
 <bean class="com.yomahub.akali.strategy.MethodHotspotStrategy"/>
 <bean class="com.yomahub.akali.spring.AkaliScanner"/>
 ```
-

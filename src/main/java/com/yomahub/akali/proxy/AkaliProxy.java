@@ -14,7 +14,10 @@ import com.yomahub.akali.manager.AkaliRuleManager;
 import com.yomahub.akali.manager.AkaliStrategyManager;
 import com.yomahub.akali.sph.SphEngine;
 import com.yomahub.akali.strategy.AkaliStrategy;
+import com.yomahub.akali.util.SerialsUtil;
 import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
+import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
 import net.bytebuddy.implementation.InvocationHandlerAdapter;
 import net.bytebuddy.matcher.ElementMatchers;
 import org.slf4j.Logger;
@@ -46,12 +49,13 @@ public class AkaliProxy {
         Collection<Method> methodList = CollUtil.union(fallbackMethodList, hotspotMethodList);
 
         return new ByteBuddy().subclass(bean.getClass())
-                .name(StrUtil.format("{}$ByteBuddy${}", bean.getClass().getSimpleName(), IdUtil.fastSimpleUUID()))
+                .name(StrUtil.format("{}$ByteBuddy${}", bean.getClass().getName(), SerialsUtil.generateShortUUID()))
+                .implement(bean.getClass().getInterfaces())
                 .method(ElementMatchers.namedOneOf(methodList.stream().map(Method::getName).toArray(String[]::new)))
                 .intercept(InvocationHandlerAdapter.of(new AopInvocationHandler()))
                 .annotateType(bean.getClass().getAnnotations())
                 .make()
-                .load(AkaliProxy.class.getClassLoader())
+                .load(AkaliProxy.class.getClassLoader(), ClassLoadingStrategy.Default.INJECTION)
                 .getLoaded()
                 .newInstance();
     }

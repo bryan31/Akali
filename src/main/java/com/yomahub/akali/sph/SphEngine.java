@@ -9,10 +9,14 @@ import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.alibaba.fastjson.JSON;
 import com.yomahub.akali.enums.AkaliStrategyEnum;
 import com.yomahub.akali.manager.AkaliStrategyManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 
 public class SphEngine {
+
+    private static final Logger log = LoggerFactory.getLogger(SphEngine.class);
 
     public static Object process(Object bean, Method method, Object[] args, String methodStr, AkaliStrategyEnum akaliStrategyEnum) throws Exception{
         switch (akaliStrategyEnum){
@@ -24,6 +28,7 @@ public class SphEngine {
                         SphO.exit();
                     }
                 }else{
+                    log.info("[AKALI]Trigger fallback strategy for [{}]", methodStr);
                     return AkaliStrategyManager.getStrategy(akaliStrategyEnum).process(bean, method, args);
                 }
             case HOT_METHOD:
@@ -33,6 +38,7 @@ public class SphEngine {
                     entry = SphU.entry(methodStr, EntryType.IN, 1, convertParam);
                     return method.invoke(bean, args);
                 }catch (BlockException e){
+                    log.info("[AKALI]Trigger hotspot strategy for [{}]", methodStr);
                     return AkaliStrategyManager.getStrategy(akaliStrategyEnum).process(bean, method, args);
                 }finally {
                     if (entry != null){

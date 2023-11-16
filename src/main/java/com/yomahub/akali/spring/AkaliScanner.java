@@ -2,6 +2,7 @@ package com.yomahub.akali.spring;
 
 import cn.hutool.core.annotation.AnnotationUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.csp.sentinel.util.MethodUtil;
 import com.alibaba.csp.sentinel.util.function.Tuple2;
@@ -14,10 +15,13 @@ import com.yomahub.akali.proxy.AkaliProxy;
 import com.yomahub.akali.strategy.AkaliStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.aop.framework.Advised;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,7 +31,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class AkaliScanner implements InstantiationAwareBeanPostProcessor {
 
     @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         Class<?> clazz = bean.getClass();
 
         if (AkaliStrategy.class.isAssignableFrom(clazz)){
@@ -39,14 +43,14 @@ public class AkaliScanner implements InstantiationAwareBeanPostProcessor {
         List<Method> fallbackMethodList = new ArrayList<>();
         List<Method> hotspotMethodList = new ArrayList<>();
         Arrays.stream(clazz.getDeclaredMethods()).forEach(method -> {
-            AkaliFallback akaliFallback = AnnotationUtil.getAnnotation(method, AkaliFallback.class);
+            AkaliFallback akaliFallback = searchAnnotation(method, AkaliFallback.class);
             if (ObjectUtil.isNotNull(akaliFallback)){
                 fallbackMethodList.add(method);
                 AkaliMethodManager.addMethodStr(MethodUtil.resolveMethodName(method), new Tuple2<>(AkaliStrategyEnum.FALLBACK, akaliFallback));
                 needProxy.set(true);
             }
 
-            AkaliHot akaliHot = AnnotationUtil.getAnnotation(method, AkaliHot.class);
+            AkaliHot akaliHot = searchAnnotation(method, AkaliHot.class);
             if (ObjectUtil.isNotNull(akaliHot)){
                 hotspotMethodList.add(method);
                 AkaliMethodManager.addMethodStr(MethodUtil.resolveMethodName(method), new Tuple2<>(AkaliStrategyEnum.HOT_METHOD, akaliHot));
@@ -57,13 +61,33 @@ public class AkaliScanner implements InstantiationAwareBeanPostProcessor {
         if (needProxy.get()){
             try{
                 AkaliProxy akaliProxy = new AkaliProxy(bean, fallbackMethodList, hotspotMethodList);
-                return akaliProxy.proxy();
+                Object proxyObject = akaliProxy.proxy();
+                return proxyObject;
             }catch (Exception e){
                 throw new BeanInitializationException(e.getMessage());
             }
 
         }else{
             return bean;
+        }
+    }
+
+    private <A extends Annotation> A searchAnnotation(Method method, Class<A> annotationType){
+        A anno = AnnotationUtil.getAnnotation(method, annotationType);
+        if (anno == null){
+            Class<?> superClazz = method.getDeclaringClass().getSuperclass();
+            if (superClazz != null){
+                Method superMethod = ReflectUtil.getMethod(superClazz, method.getName(), method.getParameterTypes());
+                if (superMethod != null){
+                    return searchAnnotation(superMethod, annotationType);
+                }else{
+                    return null;
+                }
+            }else{
+                return null;
+            }
+        }else{
+            return anno;
         }
     }
 }

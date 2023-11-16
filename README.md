@@ -22,7 +22,7 @@ Akali框架的理念就是小巧，实用，来无影去无踪，丝血团战，
 <dependency>
   <groupId>com.yomahub</groupId>
   <artifactId>akali</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 </dependency>
 ```
 

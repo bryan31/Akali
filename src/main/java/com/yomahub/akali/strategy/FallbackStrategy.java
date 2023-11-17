@@ -8,10 +8,11 @@ import com.yomahub.akali.enums.AkaliStrategyEnum;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class FallbackStrategy implements AkaliStrategy{
 
-    private final Map<String, Method> fallBackMethodMap = new HashMap<>();
+    private final Map<String, Method> fallBackMethodMap = new ConcurrentHashMap<>();
 
     @Override
     public AkaliStrategyEnum getStrategy() {

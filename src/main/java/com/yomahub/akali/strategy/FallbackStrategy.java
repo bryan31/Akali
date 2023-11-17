@@ -16,7 +16,7 @@ public class FallbackStrategy implements AkaliStrategy{
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private Map<String, Method> fallBackMethodMap = new HashMap<>();
+    private final Map<String, Method> fallBackMethodMap = new HashMap<>();
 
     @Override
     public AkaliStrategyEnum getStrategy() {
@@ -32,6 +32,7 @@ public class FallbackStrategy implements AkaliStrategy{
             fallbackMethod = fallBackMethodMap.get(fallbackMethodName);
         }else{
             fallbackMethod = ReflectUtil.getMethod(bean.getClass(), fallbackMethodName, method.getParameterTypes());
+            fallBackMethodMap.put(fallbackMethodName, fallbackMethod);
         }
 
         if (ObjectUtil.isNull(fallbackMethod)){

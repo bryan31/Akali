@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class AkaliStrategyManager {
 
-    private final static Map<AkaliStrategyEnum, AkaliStrategy> strategyMap = new HashMap<>();
+    private static final Map<AkaliStrategyEnum, AkaliStrategy> strategyMap = new HashMap<>();
 
     public static void addStrategy(AkaliStrategy akaliStrategy){
         strategyMap.put(akaliStrategy.getStrategy(), akaliStrategy);

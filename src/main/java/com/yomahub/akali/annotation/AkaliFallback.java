@@ -1,6 +1,5 @@
 package com.yomahub.akali.annotation;
 
-import com.yomahub.akali.enums.AkaliStrategyEnum;
 import com.yomahub.akali.enums.FlowGradeEnum;
 
 import java.lang.annotation.*;

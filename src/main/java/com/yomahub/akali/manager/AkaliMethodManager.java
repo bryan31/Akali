@@ -1,6 +1,5 @@
 package com.yomahub.akali.manager;
 
-import cn.hutool.core.util.StrUtil;
 import com.alibaba.csp.sentinel.util.function.Tuple2;
 import com.yomahub.akali.enums.AkaliStrategyEnum;
 import org.slf4j.Logger;
@@ -12,12 +11,12 @@ import java.util.Map;
 
 public class AkaliMethodManager {
 
-    private final static Logger log = LoggerFactory.getLogger(AkaliMethodManager.class);
+    private static final Logger log = LoggerFactory.getLogger(AkaliMethodManager.class);
 
-    private final static Map<String, Tuple2<AkaliStrategyEnum, Annotation>> akaliMethodMap = new HashMap<>();
+    private static final Map<String, Tuple2<AkaliStrategyEnum, Annotation>> akaliMethodMap = new HashMap<>();
 
     public static void addMethodStr(String methodStr, Tuple2<AkaliStrategyEnum, Annotation> tuple){
-        log.info(StrUtil.format("[AKALI] Register akali method:[{}][{}]", tuple.r1.name(), methodStr));
+        log.info("[AKALI] Register akali method:[{}][{}]", tuple.r1.name(), methodStr);
         akaliMethodMap.put(methodStr, tuple);
     }
 

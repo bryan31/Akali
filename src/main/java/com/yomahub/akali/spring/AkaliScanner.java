@@ -57,8 +57,7 @@ public class AkaliScanner implements InstantiationAwareBeanPostProcessor {
         if (needProxy.get()){
             try{
                 AkaliProxy akaliProxy = new AkaliProxy(bean, fallbackMethodList, hotspotMethodList);
-                Object obj = akaliProxy.proxy();
-                return obj;
+                return akaliProxy.proxy();
             }catch (Exception e){
                 throw new BeanInitializationException(e.getMessage());
             }

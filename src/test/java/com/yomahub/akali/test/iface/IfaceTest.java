@@ -1,6 +1,6 @@
-package com.yomahub.akali.test.aopbean;
+package com.yomahub.akali.test.iface;
 
-import com.yomahub.akali.test.aopbean.bean.TestBean;
+import com.yomahub.akali.test.iface.bean.TestIface;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,15 +12,15 @@ import org.springframework.test.context.TestPropertySource;
 import javax.annotation.Resource;
 
 @TestPropertySource(value = "classpath:application.properties")
-@SpringBootTest(classes = com.yomahub.akali.test.aopbean.AopBeanTest.class)
+@SpringBootTest(classes = IfaceTest.class)
 @EnableAutoConfiguration
-@ComponentScan({"com.yomahub.akali.test.aopbean.aop", "com.yomahub.akali.test.aopbean.bean"})
-public class AopBeanTest {
+@ComponentScan({"com.yomahub.akali.test.iface.bean"})
+public class IfaceTest {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Resource
-    private TestBean testBean;
+    private TestIface testBean;
 
     @Test
     public void test1(){

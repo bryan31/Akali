@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 
 public class AkaliScanner implements InstantiationAwareBeanPostProcessor {
 
@@ -56,7 +57,8 @@ public class AkaliScanner implements InstantiationAwareBeanPostProcessor {
         if (needProxy.get()){
             try{
                 AkaliProxy akaliProxy = new AkaliProxy(bean, fallbackMethodList, hotspotMethodList);
-                return akaliProxy.proxy();
+                Object obj = akaliProxy.proxy();
+                return obj;
             }catch (Exception e){
                 throw new BeanInitializationException(e.getMessage());
             }
@@ -68,6 +70,21 @@ public class AkaliScanner implements InstantiationAwareBeanPostProcessor {
 
     private <A extends Annotation> A searchAnnotation(Method method, Class<A> annotationType){
         A anno = AnnotationUtil.getAnnotation(method, annotationType);
+        //从接口层面向上搜索
+        if (anno == null){
+            Class<?>[] ifaces = method.getDeclaringClass().getInterfaces();
+
+            for (Class<?> ifaceClass : ifaces){
+                Method ifaceMethod = ReflectUtil.getMethod(ifaceClass, method.getName(), method.getParameterTypes());
+                if (ifaceMethod != null){
+                    return searchAnnotation(ifaceMethod, annotationType);
+                }else{
+                    return null;
+                }
+            }
+        }
+
+        //从父类逐级向上搜索
         if (anno == null){
             Class<?> superClazz = method.getDeclaringClass().getSuperclass();
             if (superClazz != null){
@@ -80,8 +97,8 @@ public class AkaliScanner implements InstantiationAwareBeanPostProcessor {
             }else{
                 return null;
             }
-        }else{
-            return anno;
         }
+
+        return anno;
     }
 }

@@ -1,14 +1,11 @@
 package com.yomahub.akali.manager;
 
 import cn.hutool.core.collection.ListUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.crypto.digest.DigestUtil;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowRule;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowRuleManager;
 import com.alibaba.csp.sentinel.slots.block.flow.param.ParamFlowRule;
 import com.alibaba.csp.sentinel.slots.block.flow.param.ParamFlowRuleManager;
 import com.alibaba.csp.sentinel.util.MethodUtil;
-import com.alibaba.fastjson.JSON;
 import com.yomahub.akali.annotation.AkaliFallback;
 import com.yomahub.akali.annotation.AkaliHot;
 import org.slf4j.Logger;
@@ -31,7 +28,7 @@ public class AkaliRuleManager {
             rule.setLimitApp("default");
 
             FlowRuleManager.loadRules(ListUtil.toList(rule));
-            log.info(StrUtil.format("[AKALI] Add Fallback Rule [{}]", resourceKey));
+            log.info("[AKALI] Add Fallback Rule [{}]", resourceKey);
         }
     }
 
@@ -48,7 +45,7 @@ public class AkaliRuleManager {
             rule.setParamIdx(0);
 
             ParamFlowRuleManager.loadRules(ListUtil.toList(rule));
-            log.info(StrUtil.format("[AKALI] Add Hot Rule [{}]", rule.getResource()));
+            log.info("[AKALI] Add Hot Rule [{}]", rule.getResource());
         }
     }
 }

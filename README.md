@@ -119,4 +119,4 @@ Akali在springboot中会自动扫描所有标注的类，您无需做任何配�
 
 ### 交流群
 
-<img src="static/img/chat.png" style="zoom:20%;" />
+<img src="static/img/chat.png" style="zoom:10%;" />

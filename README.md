@@ -116,3 +116,7 @@ Akali在springboot中会自动扫描所有标注的类，您无需做任何配�
 <bean class="com.yomahub.akali.strategy.MethodHotspotStrategy"/>
 <bean class="com.yomahub.akali.spring.AkaliScanner"/>
 ```
+
+### 交流群
+
+<img src="static/img/chat.png" style="zoom:30%;" />

@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.yomahub.akali.spring.AkaliAutoConfiguration
+  org.dromara.akali.spring.AkaliAutoConfiguration

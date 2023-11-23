@@ -20,7 +20,7 @@ Akali框架的理念就是小巧，实用，来无影去无踪，丝血团战，
 
 ```xml
 <dependency>
-  <groupId>com.yomahub</groupId>
+  <groupId>org.dromara</groupId>
   <artifactId>akali</artifactId>
   <version>1.0.3</version>
 </dependency>
@@ -112,9 +112,9 @@ Akali只针对于Springboot，Spring环境，并且所有标注了`@AkaliHot`或
 Akali在springboot中会自动扫描所有标注的类，您无需做任何配置，在spring中，你需要配置：
 
 ```xml
-<bean class="com.yomahub.akali.strategy.FallbackStrategy"/>
-<bean class="com.yomahub.akali.strategy.MethodHotspotStrategy"/>
-<bean class="com.yomahub.akali.spring.AkaliScanner"/>
+<bean class="org.dromara.akali.strategy.FallbackStrategy"/>
+<bean class="org.dromara.akali.strategy.MethodHotspotStrategy"/>
+<bean class="org.dromara.akali.spring.AkaliScanner"/>
 ```
 
 ### 交流群

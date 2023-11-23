@@ -7,16 +7,19 @@ import cn.hutool.crypto.digest.DigestUtil;
 import com.alibaba.csp.sentinel.util.MethodUtil;
 import com.alibaba.fastjson.JSON;
 import org.dromara.akali.enums.AkaliStrategyEnum;
+import org.dromara.akali.util.SegmentLock;
 
 import java.lang.reflect.Method;
 
-public class MethodHotspotStrategy implements AkaliStrategy{
+public class MethodHotspotStrategy implements AkaliStrategy {
 
     private TimedCache<String, Object> timedCache;
+    private SegmentLock segmentLock;
 
     public MethodHotspotStrategy() {
         timedCache = CacheUtil.newTimedCache(1000 * 60);
         timedCache.schedulePrune(1000);
+        segmentLock = new SegmentLock(16);
     }
 
     @Override
@@ -25,15 +28,20 @@ public class MethodHotspotStrategy implements AkaliStrategy{
     }
 
     @Override
-    public Object process(Object bean, Method method, Object[] args) throws Exception{
+    public Object process(Object bean, Method method, Object[] args) throws Exception {
         String hotKey = StrUtil.format("{}-{}", MethodUtil.resolveMethodName(method), DigestUtil.md5Hex(JSON.toJSONString(args)));
 
-        if (timedCache.containsKey(hotKey)){
-            return timedCache.get(hotKey);
-        }else{
-            Object result = method.invoke(bean, args);
-            timedCache.put(hotKey, result);
-            return result;
+        try {
+            segmentLock.lockInterruptibleSafe(hotKey);
+            if (timedCache.containsKey(hotKey)) {
+                return timedCache.get(hotKey);
+            } else {
+                Object result = method.invoke(bean, args);
+                timedCache.put(hotKey, result);
+                return result;
+            }
+        } finally {
+            segmentLock.unlock(hotKey);
         }
     }
 }

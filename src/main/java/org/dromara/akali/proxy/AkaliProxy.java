@@ -6,6 +6,7 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.csp.sentinel.SphO;
 import com.alibaba.csp.sentinel.util.MethodUtil;
+import net.bytebuddy.implementation.attribute.MethodAttributeAppender;
 import org.dromara.akali.annotation.AkaliFallback;
 import org.dromara.akali.annotation.AkaliHot;
 import org.dromara.akali.enums.AkaliStrategyEnum;
@@ -53,6 +54,7 @@ public class AkaliProxy {
                 .implement(bean.getClass().getInterfaces())
                 .method(ElementMatchers.namedOneOf(methodList.stream().map(Method::getName).toArray(String[]::new)))
                 .intercept(InvocationHandlerAdapter.of(new AopInvocationHandler()))
+                .attribute(MethodAttributeAppender.ForInstrumentedMethod.INCLUDING_RECEIVER)
                 .annotateType(bean.getClass().getAnnotations())
                 .make()
                 .load(AkaliProxy.class.getClassLoader(), ClassLoadingStrategy.Default.INJECTION)

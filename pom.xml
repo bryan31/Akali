@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.dromara</groupId>
     <artifactId>akali</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <name>Akali</name>
     <description>Local fallback and hotspot solutions in high traffic scenarios</description>
     <url>https://github.com/bryan31/Akali</url>

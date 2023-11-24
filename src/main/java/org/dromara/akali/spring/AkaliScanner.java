@@ -38,7 +38,7 @@ public class AkaliScanner implements InstantiationAwareBeanPostProcessor {
         AtomicBoolean needProxy = new AtomicBoolean(false);
         List<Method> fallbackMethodList = new ArrayList<>();
         List<Method> hotspotMethodList = new ArrayList<>();
-        Arrays.stream(clazz.getDeclaredMethods()).forEach(method -> {
+        Arrays.stream(clazz.getMethods()).forEach(method -> {
             AkaliFallback akaliFallback = searchAnnotation(method, AkaliFallback.class);
             if (ObjectUtil.isNotNull(akaliFallback)){
                 fallbackMethodList.add(method);
@@ -75,10 +75,9 @@ public class AkaliScanner implements InstantiationAwareBeanPostProcessor {
 
             for (Class<?> ifaceClass : ifaces){
                 Method ifaceMethod = ReflectUtil.getMethod(ifaceClass, method.getName(), method.getParameterTypes());
-                if (ifaceMethod != null){
-                    return searchAnnotation(ifaceMethod, annotationType);
-                }else{
-                    return null;
+                if (ifaceMethod != null) {
+                    anno = searchAnnotation(ifaceMethod, annotationType);
+                    break;
                 }
             }
         }

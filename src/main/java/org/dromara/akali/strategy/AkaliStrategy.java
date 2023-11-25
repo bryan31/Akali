@@ -1,6 +1,7 @@
 package org.dromara.akali.strategy;
 
 import org.dromara.akali.enums.AkaliStrategyEnum;
+import org.springframework.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.Method;
 

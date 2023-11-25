@@ -11,6 +11,7 @@ import org.dromara.akali.enums.AkaliStrategyEnum;
 import org.dromara.akali.manager.AkaliStrategyManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.Method;
 
@@ -18,7 +19,7 @@ public class SphEngine {
 
     private static final Logger log = LoggerFactory.getLogger(SphEngine.class);
 
-    public static Object process(Object bean, Method method, Object[] args, String methodStr, AkaliStrategyEnum akaliStrategyEnum) throws Exception{
+    public static Object process(Object bean, Method method, Object[] args, String methodStr, AkaliStrategyEnum akaliStrategyEnum) throws Throwable{
         switch (akaliStrategyEnum){
             case FALLBACK:
                 if (SphO.entry(methodStr)){

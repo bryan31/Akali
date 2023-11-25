@@ -10,8 +10,11 @@ import org.dromara.akali.annotation.AkaliHot;
 import org.dromara.akali.enums.AkaliStrategyEnum;
 import org.dromara.akali.manager.AkaliMethodManager;
 import org.dromara.akali.manager.AkaliStrategyManager;
-import org.dromara.akali.proxy.AkaliProxy;
+import org.dromara.akali.proxy.AkaliByteBuddyProxy;
 import org.dromara.akali.strategy.AkaliStrategy;
+import org.dromara.akali.util.ProxyUtil;
+import org.springframework.aop.framework.Advised;
+import org.springframework.aop.target.SingletonTargetSource;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor;
@@ -22,13 +25,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
 
 public class AkaliScanner implements InstantiationAwareBeanPostProcessor {
 
     @Override
-    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        Class<?> clazz = bean.getClass();
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        Class<?> clazz = ProxyUtil.getUserClass(bean.getClass());
 
         if (AkaliStrategy.class.isAssignableFrom(clazz)){
             AkaliStrategyManager.addStrategy((AkaliStrategy) bean);
@@ -56,8 +58,9 @@ public class AkaliScanner implements InstantiationAwareBeanPostProcessor {
 
         if (needProxy.get()){
             try{
-                AkaliProxy akaliProxy = new AkaliProxy(bean, fallbackMethodList, hotspotMethodList);
-                return akaliProxy.proxy();
+                AkaliByteBuddyProxy akaliProxy = new AkaliByteBuddyProxy(bean, clazz, fallbackMethodList, hotspotMethodList);
+                Object object = akaliProxy.proxy();
+                return object;
             }catch (Exception e){
                 throw new BeanInitializationException(e.getMessage());
             }

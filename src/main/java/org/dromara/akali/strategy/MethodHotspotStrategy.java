@@ -31,17 +31,21 @@ public class MethodHotspotStrategy implements AkaliStrategy {
     public Object process(Object bean, Method method, Object[] args) throws Exception {
         String hotKey = StrUtil.format("{}-{}", MethodUtil.resolveMethodName(method), DigestUtil.md5Hex(JSON.toJSONString(args)));
 
-        try {
-            segmentLock.lockInterruptibleSafe(hotKey);
-            if (timedCache.containsKey(hotKey)) {
-                return timedCache.get(hotKey);
-            } else {
+
+        if (timedCache.containsKey(hotKey)) {
+            return timedCache.get(hotKey);
+        } else {
+            try {
+                segmentLock.lockInterruptibleSafe(hotKey);
+                if (timedCache.containsKey(hotKey)) {
+                    return timedCache.get(hotKey);
+                }
                 Object result = method.invoke(bean, args);
                 timedCache.put(hotKey, result);
                 return result;
+            }finally {
+                segmentLock.unlock(hotKey);
             }
-        } finally {
-            segmentLock.unlock(hotKey);
         }
     }
 }

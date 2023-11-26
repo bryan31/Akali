@@ -22,6 +22,10 @@ public class TestBean {
         return "hi,"+name;
     }
 
+    public String sayHi3(String name){
+        return "hi,"+name;
+    }
+
 
     public String sayHi1Fallback(String name){
         return "fallback return";

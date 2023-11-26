@@ -35,5 +35,12 @@ public class AopBeanTest {
             log.info(testBean.sayHi2("jack"));
         }
     }
+
+    @Test
+    public void test3(){
+        for (int i = 0; i < 10; i++) {
+            log.info(testBean.sayHi3("jack"));
+        }
+    }
 }
 

@@ -32,23 +32,15 @@ public class AkaliByteBuddyProxy {
 
     private final Class<?> originalClazz;
 
-    private final List<Method> fallbackMethodList;
-
-    private final List<Method> hotspotMethodList;
-
-    public AkaliByteBuddyProxy(Object bean, Class<?> originalClazz, List<Method> fallbackMethodList, List<Method> hotspotMethodList) {
+    public AkaliByteBuddyProxy(Object bean, Class<?> originalClazz) {
         this.bean = bean;
         this.originalClazz = originalClazz;
-        this.fallbackMethodList = fallbackMethodList;
-        this.hotspotMethodList = hotspotMethodList;
     }
 
     public Object proxy() throws Exception{
-        Collection<Method> methodList = CollUtil.union(fallbackMethodList, hotspotMethodList);
-
         return new ByteBuddy().subclass(originalClazz)
                 .name(StrUtil.format("{}$ByteBuddy${}", bean.getClass().getName(), SerialsUtil.generateShortUUID()))
-                .method(ElementMatchers.namedOneOf(methodList.stream().map(Method::getName).toArray(String[]::new)))
+                .method(ElementMatchers.any())
                 .intercept(InvocationHandlerAdapter.of(new AopInvocationHandler()))
                 .attribute(MethodAttributeAppender.ForInstrumentedMethod.INCLUDING_RECEIVER)
                 .annotateType(bean.getClass().getAnnotations())

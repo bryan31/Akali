@@ -38,19 +38,15 @@ public class AkaliScanner implements InstantiationAwareBeanPostProcessor {
         }
 
         AtomicBoolean needProxy = new AtomicBoolean(false);
-        List<Method> fallbackMethodList = new ArrayList<>();
-        List<Method> hotspotMethodList = new ArrayList<>();
         Arrays.stream(clazz.getMethods()).forEach(method -> {
             AkaliFallback akaliFallback = searchAnnotation(method, AkaliFallback.class);
             if (ObjectUtil.isNotNull(akaliFallback)){
-                fallbackMethodList.add(method);
                 AkaliMethodManager.addMethodStr(MethodUtil.resolveMethodName(method), new Tuple2<>(AkaliStrategyEnum.FALLBACK, akaliFallback));
                 needProxy.set(true);
             }
 
             AkaliHot akaliHot = searchAnnotation(method, AkaliHot.class);
             if (ObjectUtil.isNotNull(akaliHot)){
-                hotspotMethodList.add(method);
                 AkaliMethodManager.addMethodStr(MethodUtil.resolveMethodName(method), new Tuple2<>(AkaliStrategyEnum.HOT_METHOD, akaliHot));
                 needProxy.set(true);
             }
@@ -58,7 +54,7 @@ public class AkaliScanner implements InstantiationAwareBeanPostProcessor {
 
         if (needProxy.get()){
             try{
-                AkaliByteBuddyProxy akaliProxy = new AkaliByteBuddyProxy(bean, clazz, fallbackMethodList, hotspotMethodList);
+                AkaliByteBuddyProxy akaliProxy = new AkaliByteBuddyProxy(bean, clazz);
                 return akaliProxy.proxy();
             }catch (Exception e){
                 throw new BeanInitializationException(e.getMessage());

@@ -22,7 +22,7 @@ Akali框架的理念就是小巧，实用，来无影去无踪，丝血团战，
 <dependency>
   <groupId>org.dromara</groupId>
   <artifactId>akali</artifactId>
-  <version>1.1.1</version>
+  <version>1.1.2</version>
 </dependency>
 ```
 

@@ -19,7 +19,7 @@ public class MethodHotspotStrategy implements AkaliStrategy {
     public MethodHotspotStrategy() {
         timedCache = CacheUtil.newTimedCache(1000 * 60);
         timedCache.schedulePrune(1000);
-        segmentLock = new SegmentLock(16);
+        segmentLock = new SegmentLock(64);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package org.dromara.akali.proxy;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.csp.sentinel.util.MethodUtil;
 import net.bytebuddy.implementation.attribute.MethodAttributeAppender;
@@ -17,12 +16,9 @@ import net.bytebuddy.implementation.InvocationHandlerAdapter;
 import net.bytebuddy.matcher.ElementMatchers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.List;
 
 public class AkaliByteBuddyProxy {
 

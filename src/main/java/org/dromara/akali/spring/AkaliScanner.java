@@ -13,17 +13,12 @@ import org.dromara.akali.manager.AkaliStrategyManager;
 import org.dromara.akali.proxy.AkaliByteBuddyProxy;
 import org.dromara.akali.strategy.AkaliStrategy;
 import org.dromara.akali.util.ProxyUtil;
-import org.springframework.aop.framework.Advised;
-import org.springframework.aop.target.SingletonTargetSource;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AkaliScanner implements InstantiationAwareBeanPostProcessor {

@@ -11,7 +11,6 @@ import org.dromara.akali.enums.AkaliStrategyEnum;
 import org.dromara.akali.manager.AkaliStrategyManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.Method;
 

@@ -54,15 +54,6 @@ public class AkaliByteBuddyProxy {
 
             if (AkaliMethodManager.contain(methodStr)){
                 AkaliStrategyEnum akaliStrategyEnum = AkaliMethodManager.getAnnoInfo(methodStr).r1;
-                Annotation anno = AkaliMethodManager.getAnnoInfo(methodStr).r2;
-
-                if (anno instanceof AkaliFallback){
-                    AkaliRuleManager.registerFallbackRule((AkaliFallback) anno, method);
-                }else if (anno instanceof AkaliHot){
-                    AkaliRuleManager.registerHotRule((AkaliHot) anno, method);
-                }else{
-                    throw new RuntimeException("annotation type error");
-                }
 
                 return SphEngine.process(bean, method, args, methodStr, akaliStrategyEnum);
             }else {

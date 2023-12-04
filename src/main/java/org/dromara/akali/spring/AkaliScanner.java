@@ -9,6 +9,7 @@ import org.dromara.akali.annotation.AkaliFallback;
 import org.dromara.akali.annotation.AkaliHot;
 import org.dromara.akali.enums.AkaliStrategyEnum;
 import org.dromara.akali.manager.AkaliMethodManager;
+import org.dromara.akali.manager.AkaliRuleManager;
 import org.dromara.akali.manager.AkaliStrategyManager;
 import org.dromara.akali.proxy.AkaliByteBuddyProxy;
 import org.dromara.akali.strategy.AkaliStrategy;
@@ -36,12 +37,14 @@ public class AkaliScanner implements InstantiationAwareBeanPostProcessor {
         Arrays.stream(clazz.getMethods()).forEach(method -> {
             AkaliFallback akaliFallback = searchAnnotation(method, AkaliFallback.class);
             if (ObjectUtil.isNotNull(akaliFallback)){
+                AkaliRuleManager.registerFallbackRule(akaliFallback, method);
                 AkaliMethodManager.addMethodStr(MethodUtil.resolveMethodName(method), new Tuple2<>(AkaliStrategyEnum.FALLBACK, akaliFallback));
                 needProxy.set(true);
             }
 
             AkaliHot akaliHot = searchAnnotation(method, AkaliHot.class);
             if (ObjectUtil.isNotNull(akaliHot)){
+                AkaliRuleManager.registerHotRule(akaliHot, method);
                 AkaliMethodManager.addMethodStr(MethodUtil.resolveMethodName(method), new Tuple2<>(AkaliStrategyEnum.HOT_METHOD, akaliHot));
                 needProxy.set(true);
             }
